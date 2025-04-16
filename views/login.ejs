@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <%- include ('base/head'); %>
+    <title>Login</title>
+
+</head>
+
+<body>
+  <%- include ('base/navbar'); %>
+    <br><br><br><br><br><br><br><br>
+    <div class="container mh-100 mt-6">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title text-center">Log in to Your Account</h2>
+              <form id="login-form" method="POST">
+                <div class="form-group">
+                  <label for="email">Email address</label>
+                  <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Log In</button>
+              </form>
+              <br>
+            </div>
+          </div>
+          <div class="card mt-3">
+            <div class="card-body text-center">
+              <p>Don't have an account? <a href="/register">Sign up</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(() => {
+        $('#login-form').submit((event) => {
+          event.preventDefault();
+          const email = $('#email').val();
+          const password = $('#password').val();
+          const formData = {
+            email: email,
+            password: password
+          };
+          $.ajax({
+            type: 'POST',
+            url: '/login',
+            data: formData,
+            dataType: 'json',
+            success: (data) => {
+              alert(data.message);
+              window.location.href = '/';
+            },
+            error: (xhr, status, error) => {
+              const responseText = xhr.responseText;
+              try {
+                const errorResponse = JSON.parse(responseText);
+                alert(errorResponse.error);
+              } catch (err) {
+                console.error('Error parsing JSON:', err);
+                alert('An error occurred while processing your request.');
+              }
+            }
+          });
+        });
+      });
+    </script>
+</body>
+
+</html>

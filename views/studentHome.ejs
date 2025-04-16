@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <%- include ('base/head'); %>
+        <title>Student Home</title>
+    </head>
+    <body>
+        <%- include ('base/navbar'); %>
+        <div class="container mt-4">
+            <h1 class="mb-3">Classes</h1>
+            <% if(tennisClass.length > 0) { %>
+            <div class="list-group">
+                <% tennisClass.forEach(function(tennisClass) { %>
+                <div class="list-group-item">
+                    <a
+                        href="/student/tennis_class/<%= tennisClass.id %>"
+                        class="link-dark text-decoration-none"
+                    >
+                        <h2 class="mb-1">
+                            <strong>Title: </strong><%= tennisClass.title %>
+                        </h2>
+                        <h3 class="mb-2">
+                            Subtitle: <%= tennisClass.subtitle %>
+                        </h3>
+                        <p><strong>By:</strong> <%= tennisClass.author %></p>
+                        <p>
+                            <strong>Published on:</strong> <%= new
+                            Date(tennisClass.publicationDate).toLocaleDateString()
+                            %>
+                        </p>
+                    </a>
+                </div>
+                <% }); %>
+            </div>
+            <% } else { %>
+            <div class="alert alert-warning">
+                No classes available at the moment.
+            </div>
+            <% } %>
+        </div>
+    </body>
+</html>

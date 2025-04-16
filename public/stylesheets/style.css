@@ -1,0 +1,83 @@
+@font-face {
+  font-family: 'Gotham Light';
+  src: url('../fonts/GothamLight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Marguerite';
+  src: url('../fonts/Marguerite.ttf') format('truetype');
+}
+
+.court {
+  font-family: 'Gotham Light', sans-serif;
+}
+
+.master {
+  font-family: 'Marguerite', sans-serif;
+  color: #55ff33;
+}
+
+
+body, html {
+  height: 80vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hero */
+
+.hero {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.hero h1 {
+  margin-bottom: 1rem;
+}
+
+.hero .btn {
+  margin: 0.5rem;
+}
+
+/* Navbar */
+
+.navbar {
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.navbar .btn {
+  margin-right: 10px;
+}
+
+.navbar-toggle .icon-bar {
+    background-color: #55ff33;
+}
+
+/* CUSTOM CONTAINERS */
+
+.thinner-container {
+  max-width: 600px;
+  margin: 0 auto; 
+}
+
+.container {
+  position: relative;
+}
+
+.likes-container {
+  top: 0;
+  left: 0;
+}
+
+.dates-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%- include ('base/head'); %>
+        <title>New Class</title>
+</head>
+
+<body>
+    <%- include ('base/navbar'); %>
+        <br />
+        <div class="container">
+            <a href="/coach" class="btn btn-secondary">Back to Coach Home</a>
+            <div class="row">
+                <h1 class="my-4">Tennis Class</h1>
+                <p>
+                    <%= articleCreation %>
+                </p>
+            </div>
+            <br>
+        </div>
+        <div class="container mt-4">
+            <form method="POST">
+                <input type="hidden" id="articleId" name="articleId" value="<%= articleId %>">
+                <div class="form-group">
+                    <label for="articleTitle">Title:</label>
+                    <input type="text" class="form-control" id="articleTitle" name="articleTitle"
+                        value="<%= articleTitle %>" placeholder="Name of the class" required>
+                </div>
+                <div class="form-group">
+                    <label for="articleSubtitle">Date & Time</label>
+                    <input type="text" class="form-control" id="articleSubtitle" name="articleSubtitle"
+                        value="<%= articleSubtitle %>" placeholder="(Month-Date hh:mm)" required>
+                </div>
+                <div class="form-group">
+                    <label for="articleText">Description:</label>
+                    <textarea class="form-control" id="articleText" name="articleText" rows="8"
+                        placeholder="Brief description of the activities that will take place during the class"
+                        required><%= articleText %></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="maxBookings">Maximum Bookings:</label>
+                    <input type="number" class="form-control" id="maxBookings" name="maxBookings"
+                        value="<%= maxBookings %>" required>
+                </div>
+                <br>
+                <div class="container">
+                    <button type="submit" class="btn btn-secondary" formaction="/coach/publish">Publish</button>
+                    <button type="submit" class="btn btn-primary" formaction="/coach/saveasdraft">Save as Draft</button>
+                </div>
+            </form>
+        </div>
+</body>
+
+</html>

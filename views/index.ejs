@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%- include ('base/head'); %>
+        <title>Court Master</title>
+</head>
+
+<body>
+    <%- include ('base/navbar'); %>
+        <section class="hero text-center py-5">
+            <div class="container">
+                <h1 class="display-4">Welcome to
+                    <span class="text-center"><span class="court">Court</span><span class="master">Master</span></span>
+                </h1>
+                <p class="lead">Your go-to destination for tennis classes. Let's get started by creating your account or
+                    logging in.</p>
+                <% if (!userEmail) { %>
+                    <div class="d-flex justify-content-center">
+                        <a id="register" class="btn btn-primary" href="/register">Get Started</a>
+                        <a id="login" class="btn btn-outline-secondary" href="/login">login</a>
+                    </div>
+                    <% } %>
+            </div>
+        </section>
+</body>
+
+</html>

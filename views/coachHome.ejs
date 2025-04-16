@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%- include ('base/head'); %>
+        <title>Coach Home</title>
+</head>
+
+<body>
+    <%- include ('base/navbar'); %>
+        <div class="container mt-4">
+            <div class="row align-items-center" style="display: flex">
+                <div class="col-md-8">
+                    <h1 class="mb-3">
+                        <%= organizer.siteTitle %>
+                    </h1>
+                    <h2 class="mb-3">
+                        <%= organizer.siteSubtitle %>
+                    </h2>
+
+                </div>
+                <div class="col-md-4 container" style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                    <a href="/coach/setting" class="btn btn-secondary">Settings</a>
+                    <span style="padding: 10px"></span>
+                    <a href="/coach/tennis_class" class="btn btn-primary">Create New Class</a>
+                </div>
+            </div>
+            <h2 class="mb-3">Published Classes</h2>
+            <% if(publishedClasses.length> 0) { %>
+                <div class="list-group">
+                    <% publishedClasses.sort((a, b)=> new Date(b.publicationDate) -
+                        new Date(a.publicationDate)).forEach(function(tennisClass) { %>
+                        <div class="list-group-item">
+                            <div style="display: flex; justify-content: space-between">
+                                <div class="container">
+                                    <a href="<%= '/student/tennis_class/' + tennisClass.id %>"
+                                        class="link-dark text-decoration-none">
+                                        <h3 class="mb-1">
+                                            <%= tennisClass.title %>
+                                        </h3>
+                                        <h4 class="mb-1">
+                                            <%= tennisClass.subtitle %>
+                                        </h4>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="bookings">
+                                                <p>
+                                                    <strong>Bookings:</strong>
+                                                    <%= tennisClass.bookings %>
+                                                </p>
+                                            </div>
+                                            <div class="dates-container">
+                                                <p>
+                                                    <span><strong>Published on:</strong>
+                                                        <%= new Date(tennisClass.publicationDate).toLocaleDateString()
+                                                            %>
+                                                    </span>
+                                                    <span><strong>Created at:</strong>
+                                                        <%= new Date(tennisClass.createdAt).toLocaleDateString() %>
+                                                    </span>
+                                                    <span><strong>Last Modified:</strong>
+                                                        <%= new Date(tennisClass.lastModified).toLocaleDateString() %>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-start align-items-center mb-3">
+                                    <form method="POST" action="/coach/delete" class="mr-2">
+                                        <input type="hidden" name="tennisClassId" value="<%= tennisClass.id %>" />
+                                        <button type="submit" class="btn btn-danger">
+                                            Delete
+                                        </button>
+                                    </form>
+                                    <span style="padding: 10px"></span>
+                                    <form>
+                                        <button type="button" class="btn btn-info"
+                                            onclick="copyToClipboard('<%= '/student/tennis_class/' + tennisClass.id %>')">
+                                            Share
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+                <% } else { %>
+                    <div class="alert alert-warning">No Published Classes...</div>
+                    <% } %>
+                        <br />
+                        <h2 class="mt-5 mb-3">Draft Classes</h2>
+                        <% if(draftClasses.length> 0) { %>
+                            <div class="list-group">
+                                <% draftClasses.sort((a, b)=> new Date(b.createdAt) - new
+                                    Date(a.createdAt)).forEach(function(tennisClass) { %>
+                                    <div class="list-group-item">
+                                        <div style="display: flex; justify-content: space-between">
+                                            <div>
+                                                <a href="/coach/tennis_class/<%= tennisClass.id %>"
+                                                    class="link-dark text-decoration-none">
+                                                    <h3 class="mb-1">
+                                                        <%= tennisClass.title %>
+                                                    </h3>
+                                                    <p>
+                                                        <strong>Created at:</strong>
+                                                        <%= new Date(tennisClass.createdAt).toLocaleDateString() %>
+                                                    </p>
+                                                    <p>
+                                                        <strong>Last Modified:</strong>
+                                                        <%= new Date(tennisClass.lastModified).toLocaleDateString() %>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                            <div class="btn-group" role="group" aria-label="Button group">
+                                                <form method="GET" action="/coach/tennis_class/<%= tennisClass.id %>"
+                                                    style="display: inline">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        Edit Draft
+                                                    </button>
+                                                    <span style="padding: 10px"></span>
+                                                </form>
+
+                                                <form method="POST" action="/coach/publish" style="display: inline">
+                                                    <input type="hidden" name="tennisClassId"
+                                                        value="<%= tennisClass.id %>" />
+                                                    <input type="hidden" name="tennisClass"
+                                                        value="<%= tennisClass.id %>" />
+                                                    <input type="hidden" name="maxBookings"
+                                                        value="<%= tennisClass.maxBookings %>" />
+                                                    <button type="submit" class="btn btn-success">
+                                                        Publish
+                                                    </button>
+                                                    <span style="padding: 10px"></span>
+                                                </form>
+
+                                                <form method="POST" action="/coach/delete" style="display: inline">
+                                                    <input type="hidden" name="tennisClassId"
+                                                        value="<%= tennisClass.id %>" />
+                                                    <button type="submit" class="btn btn-danger">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                            <% } else { %>
+                                <div class="alert alert-warning">No Drafted Classes...</div>
+                                <% } %>
+        </div>
+        <script>
+            function copyToClipboard(url) {
+                var textarea = document.createElement("textarea");
+                textarea.value = window.location.origin + url;
+                textarea.style.opacity = "0";
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textarea);
+                alert(
+                    "Share link copied to clipboard: " +
+                    window.location.origin +
+                    url
+                );
+            }
+        </script>
+</body>
+
+</html>

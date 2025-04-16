@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%- include ('base/head'); %>
+        <title>Coach Settings</title>
+</head>
+
+<body>
+    <%- include ('base/navbar'); %>
+        <br>
+        <div class="container">
+            <a href="/coach" class="btn btn-secondary">
+                Back to Coach Home</a>
+            <h1 class="my-4">Coach Settings</h1>
+            <br>
+        </div>
+        <div class="container thinner-container">
+            <form action="/coach/setting/update" method="POST">
+                <div class="form-group">
+                    <label for="siteTitle">Organizer Title:</label>
+                    <input type="text" class="form-control" id="siteTitle" name="siteTitle" value="<%= siteTitle %>"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="siteSubtitle">Organizer Subtitle:</label>
+                    <input type="text" class="form-control" id="siteSubtitle" name="siteSubtitle"
+                        value="<%= siteSubtitle %>" required>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+            </form>
+        </div>
+</body>
+
+</html>

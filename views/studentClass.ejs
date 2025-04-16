@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%- include ('base/head'); %>
+        <title>Class</title>
+</head>
+
+<body>
+    <%- include ('base/navbar'); %>
+        <div class="container mt-4">
+            <div>
+                <a href="/student" class="btn btn-secondary mb-3">
+                    Back to Student Home</a>
+                <!-- Title -->
+                <h1 id="articleTitle">
+                    <%= tennisClass.title %>
+                </h1>
+
+                <!-- Subtitle -->
+                <h2 id="articleSubtitle">
+                    <%= tennisClass.subtitle %>
+                </h2>
+
+                <!-- Coach -->
+                <p><strong>Coach: </strong>
+                    <%= tennisClass.author %>
+                </p>
+            </div>
+            <p class="text-muted">
+                <%= tennisClass.articleCreation %>
+            </p>
+            <hr />
+        </div>
+        <div class="container mt-4 text-justify">
+            <p>
+                <%= tennisClass.content %>
+            </p>
+            <br /><br />
+        </div>
+
+        <div class="container mt-4">
+            <% if (userName=='' ) { %>
+                <a href="" class="btn btn-primary" disabled>Book</a>
+                <% } else { %>
+                    <button id="bookBtn" class="btn btn-primary" <%=tennisClass.bookings>= tennisClass.maxBookings ?
+                        'disabled' : '' %>>
+                        <%= userHasBooked ? 'Cancel Booking' : 'Book' %>
+                    </button>
+                    <% } %>
+                        <p id="bookingCount">
+                            Bookings: <span id="bookingsNumber">
+                                <%= tennisClass.bookings %>
+                            </span> / <%= tennisClass.maxBookings %>
+                        </p>
+        </div>
+        <div class="container mt-4">
+            <h3 class="mb-3">Comments</h3>
+            <% if (userName=='' ) { %>
+                <form>
+                    <div class="form-group">
+                        <label for="commentInput">Add comment:</label>
+                        <textarea class="form-control" id="commentInput" name="commentInput" rows="3"
+                            disabled></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" disabled>
+                        Submit Comment
+                    </button>
+                    <br />
+                    <br />
+
+                </form>
+                <% } else { %>
+                    <form action="/student/tennis_class/<%= tennisClass.id %>/comment" method="post">
+                        <div class="form-group">
+                            <label for="commentInput">Add comment:</label>
+                            <textarea class="form-control" id="commentInput" name="commentInput" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            Submit Comment
+                        </button>
+                    </form>
+                    <% } %>
+                        <div id="comments-container">
+                            <% comments.forEach((comment)=> { %>
+                                <div class="card mb-3" id="comment-<%= comment.id %>">
+                                    <div class="card-body">
+                                        <p>
+                                            <strong>
+                                                <%= comment.username %>
+                                            </strong>
+                                            <span class="text-muted" id="comment-<%= comment.id %>"></span>:
+                                        </p>
+                                        <p>
+                                            <%= comment.comments %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <% }) %>
+                        </div>
+        </div>
+        <script>
+            function getRelativeTime(past) {
+                const msPerMinute = 60 * 1000;
+                const msPerHour = msPerMinute * 60;
+                const msPerDay = msPerHour * 24;
+                const msPerMonth = msPerDay * 30;
+                const msPerYear = msPerDay * 365;
+
+                const elapsed = new Date() - new Date(past);
+
+                if (elapsed < msPerMinute) {
+                    return "Just now";
+                } else if (elapsed < msPerHour) {
+                    return Math.round(elapsed / msPerMinute) + " minutes ago";
+                } else if (elapsed < msPerDay) {
+                    return Math.round(elapsed / msPerHour) + " hours ago";
+                } else if (elapsed < msPerMonth) {
+                    return (
+                        "about " + Math.round(elapsed / msPerDay) + " days ago"
+                    );
+                } else if (elapsed < msPerYear) {
+                    return (
+                        "about " +
+                        Math.round(elapsed / msPerMonth) +
+                        " months ago"
+                    );
+                } else {
+                    return (
+                        "about " +
+                        Math.round(elapsed / msPerYear) +
+                        " years ago"
+                    );
+                }
+            }
+
+            function updateRelativeTimeForComments() {
+                const comments = JSON.parse("<%- JSON.stringify(comments) %>");
+                comments.forEach((comment) => {
+                    const commentElement = document.getElementById(
+                        "comment-" + comment.id
+                    );
+                    const timeElement =
+                        commentElement.querySelector(".text-muted");
+                    const relativeTime = getRelativeTime(comment.createdAt);
+                    timeElement.textContent = " (" + relativeTime + ")";
+                });
+            }
+            updateRelativeTimeForComments();
+            setInterval(updateRelativeTimeForComments, 30000);
+
+            $(document).ready(function () {
+
+                $("#bookBtn").click(function (e) {
+                    e.preventDefault();
+
+                    var articleId = "<%= tennisClass.id %>";
+                    var userHasBooked = <%= JSON.stringify(userHasBooked) %>;
+                    var maxBookings = <%= tennisClass.maxBookings %>; 
+
+                    $.ajax({
+                        url: "/student/tennis_class/" + articleId + "/book",
+                        type: "POST",
+                        success: function (response) {
+                            var bookingsCount = parseInt($("#bookingsNumber").text(), 10);
+                            if (response.booked) {
+                                $("#bookBtn").text("Cancel Booking");
+                                $("#bookingsNumber").text(bookingsCount + 1);
+                            } else {
+                                $("#bookBtn").text("Book");
+                                $("#bookingsNumber").text(bookingsCount - 1);
+                            }
+
+                            if (bookingsCount + 1 >= maxBookings) { 
+                                $("#bookBtn").attr("disabled", true);
+                            } else {
+                                $("#bookBtn").removeAttr("disabled");
+                            }
+                        },
+                        error: function (error) {
+                            console.error("Error:", error);
+                        },
+                    });
+                });
+
+            });
+        </script>
+</body>
+
+</html>
